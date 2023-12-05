@@ -3446,3 +3446,39 @@
 	}
 
 })(window.Zepto || window.jQuery, window, document);
+
+
+
+// Espera a que el DOM esté completamente cargado
+document.addEventListener("DOMContentLoaded", function() {
+	// Selecciona el contenedor del video
+	var videoContainer = document.getElementById("video-container");
+  
+	// Opciones para la Intersection Observer
+	var options = {
+	  root: null, // Usa el viewport como el contenedor
+	  rootMargin: "0px", // Sin margen adicional
+	  threshold: 0.5 // Se activa cuando al menos el 50% del elemento es visible
+	};
+  
+	// Crea un nuevo Intersection Observer y pasa la función de devolución de llamada
+	var observer = new IntersectionObserver(callback, options);
+  
+	// Observa el contenedor del video
+	observer.observe(videoContainer);
+  
+	// Función de devolución de llamada cuando el contenedor del video es visible
+	function callback(entries, observer) {
+	  entries.forEach(function(entry) {
+		if (entry.isIntersecting) {
+		  // Si el contenedor del video es visible, reproduce el video
+		  var iframe = videoContainer.querySelector("iframe");
+		  iframe.src = iframe.src + "&autoplay=1";
+  
+		  // Deja de observar después de reproducir el video
+		  observer.unobserve(videoContainer);
+		}
+	  });
+	}
+  });
+  
